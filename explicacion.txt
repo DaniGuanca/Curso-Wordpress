@@ -1,0 +1,294 @@
+CMS'S (Content Management System)
+En una aplicacion web que facilita la produccion y publicacion de contenido
+
+WORDPRESS
+Es un cms de codigo libre
+    wordpress.COM: cosas paga
+    wordpress.ORG: 
+    
+VENDER UN SITIO EN WORDPRESS Y QUE SE PUEDA CONFIGURAR CON UNA APP EN EL CELULAR GARPA PARA LOS CLIENTES
+
+TAXONOMIAS
+Es la forma en como WP estructura el contenido de nuestro sitio y lo hace a través de:
+		Categorías
+		Etiquetas
+		Entradas
+		Páginas
+
+Categorias
+Van a clasificar mi contenido, van a formar la estructura o tabla de contenido del sitio. Como viñetas de primer nivel.
+Son como las secciones principales de nuestra web.
+
+Etiquetas
+Son las palabras clave para busquedas internas al sitio, keywords
+
+Entradas
+Son las publicaciones. El contenido final que vamos a mostrar, si no le pones categoria por defecto se asigna una llamada sin-categoria.
+Pueden tener muchas categorias
+
+Paginas
+Contenido estatico, por ejemplo las secciones contacto o quienes somos, no tienen nada que ver con categorias o etiquetas, no se relacionan con ellas
+
+LOOP: es el proceso con que me traigo las ultimas entradas del sitio. Pagina principal home
+
+
+INSTALACION
+Para instalar WordPress, el archivo que descargas de la pagina principal se descomprime y se pasan todos los
+archivos en la carpeta donde se va a hacer la pagina y ya desde el xamp se entra tranquilamente
+
+	PASOS:
+		1)Descargar WordPress http://es.wordpress.org/
+		2)Descomprimir WordPress en el localhost
+		3)Buscar archivo wp-config-sample.php, renombrarlo como wp-config.php y editar: 
+			db,
+			user,
+			pwd,
+			host,
+			charset,
+			table_prefix,
+				Cambiar siempre el prefijo de las tablas por seguridad por cualquier, ESCRIBIR CUALQUIER COSA para tener mas seguridad
+			Authentication Unique Keys
+				Para cambiar estas, en el archivo php hay una serie de keys con el cometario que te lleva a una URL que te da las keys
+				https://api.wordpress.org/secret-key/1.1/salt/
+				las copias y pegas donde corresponde SIEMPRE SE HACE ESO
+
+		4)Crear una  BD en MySQL desde http://localhost/phpmyadmin
+		5)Ejecutar la carpeta del sitio en el navegador y llenar la información de la instalación
+		6)Una vez instalado:
+			Para ver wp como user:
+				localhost/ruta-del-sitio
+			Para ver wp como admin:
+				localhost/ruta-del-sitio/wp-login.php
+				localhost/ruta-del-sitio/wp-admin
+
+
+
+Para mas seguridad conviene cambiar el nombre y el slug por defecto de la categoria Sin-Categoria
+
+Conviene hacer la importacion manual para tener el control total de lo que hago
+
+Importar/Exportar
+
+Esto sirve para ir del localhost al servidor en internet o viceversa
+
+1)Respaldar todo WordPress (wp-admin,wp-includes,wp-content,archivos sueltos)
+
+2)Cargar/Descargar el respaldo (FTP, SSH, github)
+
+3)Exportar en formato .sql la BD desde el phpMyAdmin
+	Considera que a veces phpMyAdmin no nos agrega la instrucción CREATE DATABASE y USE
+	Para exportar la base de datos desde el PHP MyAdmin tengo que entrar al php y desde el menu del servidor, importante fijarse que arriba diga que estamos en Servidor xxx.x.x.x, hago click en exportar elijo modo personalizado y en el desplegable elijo la base de datos que quiero exportar.
+	El formato de salida tiene que ser SQL, y en las opciones especificas al formato tildar la opcion: estructura y datos.
+	Hay que verificar que el sql generado no tenga ni CREATE DATABASE ni USE, si lo tiene lo saco, porque la BD esta creada ya en el servidor
+
+4)Abrir el archivo .sql y reemplazar todas las rutas locales a las del servidor en internet o viceversa con ayuda del comando buscar y reemplazar de tu editor de código favorito
+Mi ruta local es localhost/WordPress/perros/ entonces pego y reemplazo eso por la ruta del servidor
+La del servidor en mi caso es daniguanca.000webhostapp.com
+
+5)Modificar las siguientes lineas del archivo .htaccess sacando la ruta del local y poniendo solo / en la primera linea que edito y /inde.php en la segunda line que edito, si es que quiero que empiece en la raiz del sitio del servidor.
+El archivo esta en la raiz donde se instalo el wordpress, yo hago una copia lo modifico y lo subo al servidor
+	# BEGIN WordPress
+	<IfModule mod_rewrite.c>
+	RewriteEngine On
+	----> RewriteBase /perros/  (ESTA LINEA)
+	RewriteRule ^index\.php$ - [L]
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	----> RewriteRule . /perros/index.php [L] (ESTA LINEA)
+	</IfModule>
+	# END WordPress
+
+6)Modificar BD,USER,PWD y HOST MySQL en el archivo wp-config.php.
+Todo esta en el db manager del servidor
+
+7)Importar la BD en el destino y cargar el nuevo contenido. Esto lo hago desde el PHP My Admin del servidor
+
+Nota:
+	Si las estructuras de carpeta se respetan en el servidor y en el localhost, cuando haya nuevos cambios, sólo hay que hacer los pasos 2,3, 4 y 7. los demás sólo la primera vez.
+
+
+
+	TEMAS PERSONALIZADOS
+	Para crear mis propios temas creo la carpeta con el nombre que le voy a poner al tema en wp-content/themes. Dentro de esa carpeta hago el index.php, la hoja de estilo y todo lo que uso generalmente cuando hago maquetacion de sitios web.
+	La hoja de estilo obligatoriamente tengo que llamarla style.
+	Con un index y un style.css wordpress ya lo reconoce como tema y screenshot es la imagen que muestra como muestra.
+
+	Los detalles que se ve cuando uno hace click en detalles los puedo escribir en el style.css con los siguientes parametros, todo comentado:
+	/* 
+			Theme Name: Tema Personalizado
+			Theme URI: http://bextlan.com/cursos/wordpress
+			Author: Dani Guanca
+			Author URI: http://jonmircha.com
+			Description: Este es el tema diseñado para mi sitio personal de perros.
+			Version: 0.0.1
+			Tags: perros, canes, sabuesos, dogs, html5, wordpress, responsive design, bextlán.
+	*/
+
+	La funcion bloginfo("cadena") muestra la informacion del blog sobre lo que pasemos en la cadena puede ser name, descritpion etc. Todo esta en la documentacion 	http://codex.wordpress.org/
+
+
+CSS
+EL REM es unidad relativa y ese valor relativo es el que tiene el html, por lo general en html pongo font-size: 16px , Entonces en cualquier componente que ponga font-size: 1rem; quiere decir que van a tener 16px, si pongo 2rem va a ser 32px y asi .
+
+
+Funciones de inclusión obligatorias:
+	Si queremos que nuestro tema permita el correcto funcionamiento de plugins de terceros, debemos activar las siguientes funciones de esta manera WordPress permite a los plugins imprimir información en el header o el footer:
+	<?php wp_head(); ?>
+		Debemos colocarlo antes de </head>
+	<?php wp_footer(); ?>
+		Debemos colocarlo antes de </body>
+
+
+PLANTILLAS EN WORDPRESS (Clase 03Templates)
+Plantillas en WordPress: Son los archivos que nuestro tema va utilizando dependiendo del contenido solicitado
+	https://developer.wordpress.org/files/2014/10/wp-template-hierarchy.jpg
+	index.php	>>	template principal
+		home.php	>>	template del home del sitio
+		archive.php	>>	template de categorías y etiquetas
+			category.php	>>	template de categorías
+			tag.php	>>	template de etiquetas
+		singular.php	>>	template de entradas y páginas
+			single.php	>>	template de entradas
+			page.php	>>	template de páginas estáticas
+		404.php	>>	template para Error 404
+		search.php	>>	template para búsquedas
+		comments.php	>>	template para los comentarios
+		author.php	>>	template para mostrar la página de autor
+		***Templates personalizados:
+			Podemos tener templates personalizados para: 
+				categorías, etiquetas y páginas estáticas
+			Podemos crear templates personalizados por:
+				slug, id o comentario php
+
+		LOS ID TAMBIEN LOS PUEDO SACAR AL ENTRAR AL ADMINISTRADOR DE WP Y PONER EDITAR UNA ENTRADA CATEGORIA O ETIQUETA, EN LA URL VA A SALIR EL ID
+
+		TEMPLATE PERSONALIZADO DE CATEGORIA POR ID
+		Para usar los enlaces personalizados por id se tiene que buscar el id de la categoria en la BD
+		Despues en caso de categoria crear el archivo category-id.php con el numero id de la categoria
+
+		TEMPLATE PERSONALIZADO DE CATEGORIA POR SLUG
+		Para usar los enlaces personalizados por slug se tiene que tiene que usar el slug de la categoria
+		Despues en caso de categoria crear el archivo category-slug.php con el nombre del slug de la categoria
+
+		TEMPLATE PERSONALIZADO DE ETIQUETA POR ID
+		Para usar los enlaces personalizados por id se tiene que buscar el id de la etiqueta en la BD
+		Despues en caso de etiqueta crear el archivo tag-id.php con el numero id de la etiqueta
+
+		TEMPLATE PERSONALIZADO DE ETIQUETA POR SLUG
+		Para usar los enlaces personalizados por slug se tiene que tiene que usar el slug de la etiqueta
+		Despues en caso de etiqueta crear el archivo tag-slug.php con el nombre del slug de la etiqueta
+
+		TEMPLATE PERSONALIZADO DE PAGINA POR ID
+		Para usar los enlaces personalizados por id se tiene que buscar el id de la pagina en la BD
+		Despues en caso de pagina crear el archivo page-id.php con el numero id de la pagina
+
+		TEMPLATE PERSONALIZADO DE PAGINA POR SLUG
+		Para usar los enlaces personalizados por slug se tiene que tiene que usar el slug de la pagina
+		Despues en caso de pagina crear el archivo page-slug.php con el nombre del slug de la pagina
+
+		TEMPLATE PERSONALIZADO DE PAGINA POR COMENTARIO (SOLO SIRVE PARA PAGINAS ESTATICAS)
+		Se tiene que comentar una linea que diga Template name: nombre que quiera
+		Y desde el administrador en editar pagina ya automaticamente en atributos de pagina - plantilla se puede elegir la plantilla que cree anteriormente
+
+
+FORMULARIO DE BUSQUEDA GET_SEARCH_FORM
+El metodo get_search_form() devuelve el siguiente formulario:
+  <form role="search" method="get" id="searchform" class="searchform" action="http://localhost/WordPress/perros/">
+				<div>
+					<label class="screen-reader-text" for="s">Buscar:</label>
+					<input type="text" value="" name="s" id="s">
+					<input type="submit" id="searchsubmit" value="Buscar">
+				</div>
+			</form> 
+
+Si a get_search_form() le mando un false asi: get_search_form(false) el formulario me lo devuelve como string
+
+get_search_query() devuelve lo que se busca por el formulario, osea la variable
+
+COMMENTS
+Nuevamente todo esta en la documentacion.
+El comments.php tiene que llamarse dentro del content de una publicacion para mostrar comentarios.
+Usando la funcion comments_template() llamo al comments.php
+
+comments_form() muestra el formulario para dejar comentarios, la validacion y programacion es automatica
+
+wp_list_comments() muestra la lista de comentarios de un post, se debe usar dentro de una etiqueta <ol> o <ul> porque cada comentario es un <li>
+
+
+
+FUNCTIONS.PHP 
+El archivo functions.php es para hacer funciones personalizadas
+Los hooks le dan funcionalidad externa a mi tema
+
+Hooks are provided by WordPress to allow your plugin to 'hook into' the rest of WordPress; that is, to call functions in your plugin at specific times, and thereby set your plugin in motion. There are two kinds of hooks:
+
+Actions (Codex Action Reference)
+Filters (Codex Filter Reference)
+
+Las ACCIONES son las funcionalidades que le asignamos a wordpress como una funcion con cometido particular o especifico (La ligamos a eventos)
+Los FILTROS son acciones que van a modificar algunas cosas que wordpress genera por default, (sirven para modificar la informacion que viene de wordpress)
+
+
+
+MENUS
+Para hacer menus personalizados hay que usar la funcion register_nav_menus(arreglo de menus) eso va a hacer que aparezca la opcion de menus en el administrador en la solapa de apariencia.
+Luego de registrarlo se lo configura en el administrador poner que va a tener el menu.
+Y por el ultimo en el header o donde vaya a poner el menu uso la funcion wp_nav_menu(arreglo) para mostrar el menu. El arreglo que recibe tiene varias opciones casi todas opcionales, la mas importante y requerida es 'theme_location' que es para asignar que menu registrado en register_nav_menus quiero usar.
+//https://developer.wordpress.org/reference/functions/wp_nav_menu/
+
+
+WIDGETS
+WordPress Widgets add content and features to your Sidebars. Examples are the default widgets that come with WordPress; for Categories, Tag cloud, Search, etc. Plugins will often add their own widgets.
+
+Para crear uno se hace un hook a la accion widgets_init, dentro de la funcion que se va a llamar cuando ocurra el hook hay que usar la funcion register_sidebar. Al usar la funcion, ya aparece la opcion para administrar widgets en el administrador. El register_sidebar es para agregar barras laterales para administrar. Tambien puedo usar register_sidebars(numero) es en plurar, para hacer varias barras laterales de una 
+Al igual que con los menus primero los registro en function.php con el hook, despues los administro en el administrador y el ultimo paso es mostrarlos en el archivo donde quiero que se vea con la funcion dynamic_sidebar(id)
+dynamic_sidebar(id) recibe el id del sidebar que quiero ver
+
+https://codex.wordpress.org/Widgets_API
+http://codex.wordpress.org/Function_Reference/register_sidebar
+
+
+Plugins:
+	http://wordpress.org/plugins/
+		WP No Category Base: quita la palabara category de la url
+    WP-No-Tag-Base: quita la palabra tag de la url
+    WP-PageNavi: para la paginacion (este buscarlo en wordpress.org)
+		WP-SuperCache
+    Comments Evolved for WordPress (para gestionar comentarios, por ejemplo para ocultarlos o reemplazarlos por comentarios de redes sociales)
+    Infinite Scroll
+		Contact form 7
+		Jetpack: para el SEO
+		Insert PHP: permite insertar codigo php en los post o entradas	
+
+
+ALGO DE CSS
+Cuando tengo un elemento con posicion relativa (position: relative) y a su hijo le pongo posicion absoluta (position: absolute) entonces el hijo se va a posicionar debajo del padre si no se posiciona segun el body
+
+EL POSITION ABSOLUTE busca un elemento con position relative para ponerse abajo si no encuentra uno se pone segun el body
+
+En este codigo CSS de abajo Jon hace que los li hijos del ultimo elemento del primer menu se desplieguen bajo el, los li hijos son el submenu
+
+.nav li:last-child {
+  position: relative;
+}
+
+.sub-menu {
+  position: absolute;
+  top: 0;
+  left: 4.5rem;
+  opacity: 0;
+  transition: all 0.5s ease-out;
+}
+
+
+
+
+AL PONER EN CSS la clase !important hace que predomine al propiedad a la que se le agrego
+  .nav,
+  .search {
+    display: inline-block !important;
+  }
+
+
+EN CSS background-size: cover es para que se ajuste al ancho total como en las fotos de portada de face
+background-size: contain es para que no se deforme la imagen peroe no cubre toda la anchura

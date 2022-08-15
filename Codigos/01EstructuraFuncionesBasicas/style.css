@@ -1,0 +1,58 @@
+/* 
+Theme Name: Tema Personalizado
+Theme URI: http://bextlan.com/cursos/wordpress
+Author: Dani Guanca
+Author URI: http://jonmircha.com
+Description: Este es el tema diseñado para mi sitio personal de perros.
+Version: 0.0.1
+Tags: perros, canes, sabuesos, dogs, html5, wordpress, responsive design, bextlán.
+*/
+html,
+body {
+  box-sizing: border-box;
+  font-family: sans-serif;
+  font-size: 16px;
+  color: #eee;
+  background-color: #222;
+}
+
+*,
+*:after,
+*:before {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: block;
+  margin: 1rem auto;
+  padding: 1rem;
+  width: 100%;
+  font-size: 0;
+  background-color: #eee;
+}
+
+.item {
+  font-size: 1rem;
+  padding: 1rem;
+  width: 100%;
+  background-color: #999;
+  border: medium solid #444;
+}
+
+/*Para poner el inline block en componentes, a los componentes que quiera hacerle eso le pongo esta clase, el block los alinea en vertical, al hacer inline block hago a todos en una sola linea, sirve para el header, el main y sidebar */
+.i-b {
+  display: inline-block;
+  vertical-align: top;
+}
+
+/*Esta clase va a ser para asignar el ancho de 30, y se lo voy a poner al logo y al sidebar*/
+.w-30 {
+  width: 30%;
+}
+
+/*Esta clase va a ser para asignar el ancho de 70, y se lo voy a poner al nav y al main*/
+.w-70 {
+  width: 70%;
+}
